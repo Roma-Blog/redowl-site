@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load list_services %}
+
+{% block extra_css %}{% endblock extra_css %}
+
+{% block content %}
+
+<section class="tf__pricing pt_160 pb_100">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-8 m-auto">
+            <div class="tf__common_heading">
+                <div>Чем мы можем помочь вам?</div>
+                <h1 class="tf__common_heading_color">{{ page.tag_h1 }}</h1>
+            </div>
+            <ul class="list-service">
+            {% list_services as services%}
+            {% for service in services %}
+                <li class="item-service">
+                    <div class="item-service__img-box">
+                        {% image service.img_template original as image %}
+                        <img
+                        src="{{ image.url }}"
+                        alt="Изображение услуги {{ service.title }}"
+                        class="item-service__img" >
+                        
+                    </div>
+                    <div class="item-service__text-box">
+                        <a href="{{ service.url }}">
+                            <h4 class="item-service__title">{{ service.title }}</h4>
+                        </a>
+                        <p>{{ service.anatation }}</p>
+                        <a href="{{ service.url }}" class="item-service__link">Подробнее >>></a>
+                    </div>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+</section>
+<section class="tf__testimonial tf__pricing_testimonial seo_content">
+    <div class="container">
+    <div class="row">
+        <div class="col-md-6 m-auto">
+            {{ page.seo_text|richtext }}
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

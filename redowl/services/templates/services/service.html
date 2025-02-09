@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+{% block body_class %}{% endblock %}
+
+{% block extra_css %}
+
+
+{% endblock extra_css %}
+
+{% block content %}
+
+<div itemscope itemtype="https://schema.org/Service">
+<section class="tf__about pt_245 pb_90">
+    <div class="container">
+    <div class="row">
+        <div class="col-xl-6 col-lg-6">
+        <div class="tf__common_heading tf__common_heading2">
+            <div>Наша услуга</div>
+            <h1 class="tf__common_heading_color" itemprop="serviceType">{{ page.tag_h1 }}</h1>
+            <p>{{ page.anatation }}</p>
+            <button id="btn-popup" class="tf__common_btn">{{ page.text_btn}}</button>
+        </div>
+        </div>
+        <div class="col-xl-6 col-lg-6">
+        <div class="tf__about_img tf__free_iteam_img mx-auto">
+            {% image page.img_template original as image %}
+            <img
+            src="{{ image.url }}"
+            alt="Изображение услуги {{ page.tag_h1 }}"
+            class="img-fluid" >
+        </div>
+        </div>
+    </div>
+    </div>
+</section>
+<section class="service__content">
+    <div class="container">
+    <div class="row">
+        <div class="col-md-8" itemprop="description">
+            {{ page.seo_text|richtext }}
+        </div>
+    </div>
+    </div>
+</section>
+<section class="tf__work_process pt_70 pb_50">
+    <div class="container">
+    <div class="row">
+        <div class="col-xl-8 m-auto">
+        <div class="tf__common_heading">
+            <div>ЭТАПЫ</div>
+            <div class="title-2 tf__common_heading_color">Как мы будем работать</div>
+        </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 tf__work_process_img-box">
+        <div class="tf__work_process_img">
+            {% image page.img_steps_work original as image %}
+            <img
+            src="{{ image.url }}"
+            alt="Изображение процесса работы по шагам"
+            class="w-100" >
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="tf__process_accordion">
+            <div class="accordion" id="accordionExample">
+                {% for step in page.steps_works %}
+                <div class="accordion-item">
+                    <div class="accordion-header" id="headingOne0{{ forloop.counter }}">
+                        <button
+                        class="accordion-button tf__process_accordion_btn {% if not forloop.first %}collapsed{% endif %}"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse0{{ forloop.counter }}"
+                        aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+                        aria-controls="collapse0{{ forloop.counter }}"
+                        >
+                        <span>{{ forloop.counter }}</span>
+                        {% include_block step.value.title %}
+                        </button>
+                    </div>
+                    <div
+                        id="collapse0{{ forloop.counter }}"
+                        class="accordion-collapse collapse {% if forloop.first %}show{% endif %}"
+                        aria-labelledby="heading0{{ forloop.counter }}"
+                        data-bs-parent="#accordionExample"
+                    >
+                        <div class="accordion-body">
+                        <p>
+                            {% include_block step.value.description %}
+                        </p>
+                        </div>
+                    </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
+</section>
+ПРЕИМУЩЕСТВА
+<section class="tf__pricing pt_160 pb_100">
+    <div class="container">
+    <div class="row">
+        <div class="col-xl-8 m-auto">
+        <div class="tf__common_heading">
+            <div>pricing</div>
+            <div class="title-2 tf__common_heading_color">Цены на услуги</div>
+        </div>
+        </div>
+    </div>
+    <div class="row">
+        {% for price in page.price_list %}
+        <div class="col-xl-4 col-md-6">
+            <div class="tf__single_pricing mb-4">
+            <h5>{% include_block price.value.title %}</h5>
+            {% include_block price.value.description|richtext %}
+            <p class="tf__single_pricing__price">от <span>{% include_block price.value.price %} руб.</span></p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    </div>
+</section>
+<section class="tf__faq">
+    <div class="container">
+    <div class="row">
+        <div class="col-xl-6 m-auto">
+        <div class="tf__common_heading tf__faq_common_heading">
+            <div>faq</div>
+            <div class="title-2 tf__common_heading_color">
+            Вопросы и ответы по услуге
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-8 col-md-8 col-lg-8 mx-auto">
+        <div class="accordion tf__faq_accordion" id="FAQaccordionExample0{{ forloop.counter }}">
+            {% for faq in page.faq %}
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="FAQheading{{ forloop.counter }}">
+                <button
+                    class="accordion-button tf__faq_accordion_btn {% if not forloop.first %}collapsed{% endif %}"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapse0{{ forloop.counter }}"
+                    aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+                    aria-controls="collapse0{{ forloop.counter }}"
+                >
+                    {% include_block faq.value.question %}
+                </button>
+                </h2>
+                <div
+                id="collapse0{{ forloop.counter }}"
+                class="accordion-collapse collapse {% if forloop.first %}show{% endif %}"
+                aria-labelledby="heading{{ forloop.counter }}"
+                data-bs-parent="#accordionExample0{{ forloop.counter }}"
+                >
+                <div class="accordion-body">
+                    {% include_block faq.value.answer|richtext %}
+                </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        </div>
+    </div>
+    </div>
+</section>
+</div>
+<dialog id="service__popup" class="service__popup">
+    <div class="service__popup-close-block">
+    <button id="service__popup-close" class="service__popup-btn"><i class="far fa-times close_icon_close"></i></button>
+    </div>
+    <div class="service__popup-title">{{ page.text_btn }}</div>
+    <?php echo do_shortcode( '[contact-form-7 id="55159f6" title="Форма обратной связи"]' ) ?>
+</dialog>
+{% endblock content %}
