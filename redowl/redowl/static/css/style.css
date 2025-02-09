@@ -1253,7 +1253,7 @@ input[type="checkbox"] {
   -o-transition: all linear 0.3s;
 }
 .tf__unlock_heading div.title-form{
-  font-size: 44px;
+  font-size: 32px;
   font-weight: 700;
   color: var(--colorWhite);
   transition: all linear 0.3s;
@@ -2499,7 +2499,7 @@ a .item-service__title:hover{
 
 @media (max-width: 1400px) {
   .page-contac-address{
-    flex-wrap: nowrap:
+    flex-wrap: nowrap;
   }
   .page-contact-list{
     max-width:452px;
