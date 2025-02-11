@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+{% load posts_list %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/blog_style.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<section class="blog">
+    <div class="blog__header">
+        <div class="top_title">СТАТЬИ</div>
+        <h1>{{ page.tag_h1 }}</h1>
+    </div>
+    <div class="blog__posts_list">
+        <div class="blog__posts_list_cont">
+        {% get_posts_list as posts %}
+            {% for post in posts %}
+            <div class="tf__single_blog">
+                <div class="tf__single_blog_img">
+                {% image post.img_post original as image %}
+                <img
+                    src="{{ image.url }}"
+                    alt="Изображение для статьи {{ post.title }}" >
+                </div>
+                <div class="tf__single_blog_text">
+                <ul class="d-flex flex-wrap">
+                    <li>{{ post.latest_revision_created_at|date:"d M Y" }}</li>
+                    <li>Рыжиков Роман</li>
+                </ul>
+                <a href="{{ post.url }}" class="tf__single_blog_heading">{{ post.title }}</a>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock content %}

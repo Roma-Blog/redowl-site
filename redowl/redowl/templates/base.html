@@ -112,18 +112,18 @@
                     <div class="title-form">
                         {% block form_title %}
                             {% if page.form_title %}
-                            {{ page.form_title }}
+                                {{ page.form_title }}
                             {% else %}
-                            Доверьте ваш проект профессионалам
+                                Доверьте ваш проект профессионалам
                             {% endif %}
                         {% endblock %}
                     </div>
                     <p> 
                     {% block form_text %}
                         {% if page.form_text %}
-                        {{ page.form_text }}
+                            {{ page.form_text }}
                         {% else %}
-                        Оставьте свой номер и мы свяжемся с вами и обсубим вашу задачу или проект.
+                            Оставьте свой номер и мы свяжемся с вами и обсубим вашу задачу или проект.
                         {% endif %}
                     {% endblock %}
                     </p>
@@ -132,7 +132,7 @@
                 </div>
                 <div class="col-md-6">
                     {% contact_form as form %}
-                    <form action="/tg-forms/" method="post">
+                    <form class="ajax-form" action="{% url 'tg-forms' %}" method="post">
                         {% csrf_token %}
                         {{ form.contact_form.as_p }}
                         <input type="submit" value="Отправить">
@@ -210,6 +210,7 @@
     </footer>
     
     {# Global javascript #}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="{% static 'js/plugin.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
 
@@ -218,14 +219,41 @@
     {% endblock %}
 
     <script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function() {
-    var pageTitle = document.title;
-    var hiddenFields = document.querySelectorAll('input[name="page-title"]');
+        document.addEventListener('DOMContentLoaded', function() {
+        let pageTitle = document.title;
+        let hiddenFields = document.querySelectorAll('input[name="page-title"]');
+            hiddenFields.forEach(function(hiddenField) {
+                hiddenField.value = pageTitle;
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.ajax-form').on('submit', function(event) {
+                event.preventDefault();
+                let form = $(this);
+                let url = form.attr('action');
 
-    hiddenFields.forEach(function(hiddenField) {
-        hiddenField.value = pageTitle;
-    });
-    });
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: form.serialize(),
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            console.log(response);
+                        } else {
+                            console.log(response);
+                        }
+                    },
+                    error: function() {
+                        alert('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>

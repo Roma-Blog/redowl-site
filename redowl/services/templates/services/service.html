@@ -142,34 +142,12 @@
 
     <div class="row">
         <div class="col-xl-8 col-md-8 col-lg-8 mx-auto">
-        <div class="accordion tf__faq_accordion" id="FAQaccordionExample0{{ forloop.counter }}">
             {% for faq in page.faq %}
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="FAQheading{{ forloop.counter }}">
-                <button
-                    class="accordion-button tf__faq_accordion_btn {% if not forloop.first %}collapsed{% endif %}"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapse0{{ forloop.counter }}"
-                    aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
-                    aria-controls="collapse0{{ forloop.counter }}"
-                >
-                    {% include_block faq.value.question %}
-                </button>
-                </h2>
-                <div
-                id="collapse0{{ forloop.counter }}"
-                class="accordion-collapse collapse {% if forloop.first %}show{% endif %}"
-                aria-labelledby="heading{{ forloop.counter }}"
-                data-bs-parent="#accordionExample0{{ forloop.counter }}"
-                >
-                <div class="accordion-body">
-                    {% include_block faq.value.answer|richtext %}
-                </div>
-                </div>
-            </div>
+            <details class="tf__faq_accordion_item">
+                <summary><h3>{% include_block faq.value.question %}</h3></summary>
+                {% include_block faq.value.answer|richtext %}
+            </details>
             {% endfor %}
-        </div>
         </div>
     </div>
     </div>
