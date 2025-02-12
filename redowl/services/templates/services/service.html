@@ -3,46 +3,30 @@
 {% load wagtailcore_tags %}
 {% load wagtailimages_tags %}
 
-{% block body_class %}{% endblock %}
-
 {% block extra_css %}
-
-
+    <link rel="stylesheet" type="text/css" href=" {% static 'css/services_style.css' %}">
 {% endblock extra_css %}
 
 {% block content %}
 
 <div itemscope itemtype="https://schema.org/Service">
-<section class="tf__about pt_245 pb_90">
-    <div class="container">
-    <div class="row">
-        <div class="col-xl-6 col-lg-6">
-        <div class="tf__common_heading tf__common_heading2">
-            <div>Наша услуга</div>
-            <h1 class="tf__common_heading_color" itemprop="serviceType">{{ page.tag_h1 }}</h1>
-            <p>{{ page.anatation }}</p>
-            <button id="btn-popup" class="tf__common_btn">{{ page.text_btn}}</button>
-        </div>
-        </div>
-        <div class="col-xl-6 col-lg-6">
-        <div class="tf__about_img tf__free_iteam_img mx-auto">
-            {% image page.img_template original as image %}
-            <img
-            src="{{ image.url }}"
-            alt="Изображение услуги {{ page.tag_h1 }}"
-            class="img-fluid" >
-        </div>
-        </div>
+<section class="page-service__header">
+    <div class="page-service__header-left">
+        <div class="top_title">Наша услуга</div>
+        <h1 itemprop="serviceType">{{ page.tag_h1 }}</h1>
+        <p>{{ page.anatation }}</p>
+        <button id="btn-popup" class="page-service__header-btn">{{ page.text_btn}}</button>
     </div>
+    <div class="page-service__header-right">
+        {% image page.img_template original as image %}
+        <img
+        src="{{ image.url }}"
+        alt="Изображение услуги {{ page.tag_h1 }}">
     </div>
 </section>
-<section class="service__content">
-    <div class="container">
-    <div class="row">
-        <div class="col-md-8" itemprop="description">
-            {{ page.seo_text|richtext }}
-        </div>
-    </div>
+<section class="page-service__content">
+    <div class="page-service__content-box" itemprop="description">
+        {{ page.seo_text|richtext }}
     </div>
 </section>
 <section class="tf__work_process pt_70 pb_50">
@@ -50,7 +34,7 @@
     <div class="row">
         <div class="col-xl-8 m-auto">
         <div class="tf__common_heading">
-            <div>ЭТАПЫ</div>
+            <div class="top_title">ЭТАПЫ</div>
             <div class="title-2 tf__common_heading_color">Как мы будем работать</div>
         </div>
         </div>
@@ -104,35 +88,27 @@
     </div>
 </section>
 ПРЕИМУЩЕСТВА
-<section class="tf__pricing pt_160 pb_100">
-    <div class="container">
-    <div class="row">
-        <div class="col-xl-8 m-auto">
-        <div class="tf__common_heading">
-            <div>pricing</div>
-            <div class="title-2 tf__common_heading_color">Цены на услуги</div>
-        </div>
-        </div>
+<section class="page-service__pricing">
+    <div class="page-service__pricing-heading">
+        <div class="top_title">pricing</div>
+        <div class="title-2">Цены на услуги</div>
     </div>
-    <div class="row">
+    <ul class="page-service__pricing-list">
         {% for price in page.price_list %}
-        <div class="col-xl-4 col-md-6">
-            <div class="tf__single_pricing mb-4">
-            <h5>{% include_block price.value.title %}</h5>
+        <li class="page-service__pricing-item">
+            <h3>{% include_block price.value.title %}</h3>
             {% include_block price.value.description|richtext %}
             <p class="tf__single_pricing__price">от <span>{% include_block price.value.price %} руб.</span></p>
-            </div>
-        </div>
+        </li>
         {% endfor %}
-    </div>
-    </div>
+    </ul>
 </section>
 <section class="tf__faq">
     <div class="container">
     <div class="row">
         <div class="col-xl-6 m-auto">
         <div class="tf__common_heading tf__faq_common_heading">
-            <div>faq</div>
+            <div class="top_title">faq</div>
             <div class="title-2 tf__common_heading_color">
             Вопросы и ответы по услуге
             </div>
