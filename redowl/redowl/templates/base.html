@@ -98,48 +98,39 @@
 
     {% block content %}{% endblock %}
 
-<footer class="tf__footer">
+<footer class="footer">
     <div class="container">
         <div class="row">
-        <div class="col-xl-12">
-            <div class="tf__unlock">
-            <div class="row">
-                <div class="col-md-6">
-                <div class="form-block-text">
-                    <div class="tf__common_heading tf__unlock_heading">
-                    <div>НАПИШИТЕ НАМ</div>
-                    <div class="title-form">
-                        {% block form_title %}
-                            {% if page.form_title %}
-                                {{ page.form_title }}
-                            {% else %}
-                                Доверьте ваш проект профессионалам
-                            {% endif %}
-                        {% endblock %}
-                    </div>
-                    <p> 
-                    {% block form_text %}
-                        {% if page.form_text %}
-                            {{ page.form_text }}
+        <div class="footer__box-form">
+            <div class="footer__box-form-left">
+                <div>НАПИШИТЕ НАМ</div>
+                <div class="title-form">
+                    {% block form_title %}
+                        {% if page.form_title %}
+                            {{ page.form_title }}
                         {% else %}
-                            Оставьте свой номер и мы свяжемся с вами и обсубим вашу задачу или проект.
+                            Доверьте ваш проект профессионалам
                         {% endif %}
                     {% endblock %}
-                    </p>
-                    </div>
                 </div>
-                </div>
-                <div class="col-md-6">
-                    {% contact_form as form %}
-                    <form class="ajax-form" action="{% url 'tg-forms' %}" method="post">
-                        {% csrf_token %}
-                        {{ form.contact_form.as_p }}
-                        <input type="submit" value="Отправить">
-                    </form>
-                </div>
+                <p> 
+                {% block form_text %}
+                    {% if page.form_text %}
+                        {{ page.form_text }}
+                    {% else %}
+                        Оставьте свой номер и мы свяжемся с вами и обсубим вашу задачу или проект.
+                    {% endif %}
+                {% endblock %}
+                </p>
             </div>
+            <div class="footer__box-form-right">
+                {% contact_form as form %}
+                <form class="ajax-form" action="{% url 'tg-forms' %}" method="post">
+                    {% csrf_token %}
+                    {{ form.contact_form.as_p }}
+                    <input type="submit" value="Отправить">
+                </form>
             </div>
-        </div>
         </div>
 
         <div class="row">

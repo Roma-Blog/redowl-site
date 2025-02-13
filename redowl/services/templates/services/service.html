@@ -11,17 +11,19 @@
 
 <div itemscope itemtype="https://schema.org/Service">
 <section class="page-service__header">
-    <div class="page-service__header-left">
-        <div class="top_title">Наша услуга</div>
-        <h1 itemprop="serviceType">{{ page.tag_h1 }}</h1>
-        <p>{{ page.anatation }}</p>
-        <button id="btn-popup" class="page-service__header-btn">{{ page.text_btn}}</button>
-    </div>
-    <div class="page-service__header-right">
-        {% image page.img_template original as image %}
-        <img
-        src="{{ image.url }}"
-        alt="Изображение услуги {{ page.tag_h1 }}">
+    <div class="page-service__header-box">
+        <div class="page-service__header-left">
+            <div class="top_title">Наша услуга</div>
+            <h1 itemprop="serviceType">{{ page.tag_h1 }}</h1>
+            <p>{{ page.anatation }}</p>
+            <button id="btn-popup" class="page-service__header-btn">{{ page.text_btn}}</button>
+        </div>
+        <div class="page-service__header-right">
+            {% image page.img_template original as image %}
+            <img
+            src="{{ image.url }}"
+            alt="Изображение услуги {{ page.tag_h1 }}">
+        </div>
     </div>
 </section>
 <section class="page-service__content">
@@ -29,62 +31,32 @@
         {{ page.seo_text|richtext }}
     </div>
 </section>
-<section class="tf__work_process pt_70 pb_50">
-    <div class="container">
-    <div class="row">
-        <div class="col-xl-8 m-auto">
-        <div class="tf__common_heading">
-            <div class="top_title">ЭТАПЫ</div>
-            <div class="title-2 tf__common_heading_color">Как мы будем работать</div>
-        </div>
-        </div>
+<section class="work_process">
+    <div class="work_process__header">
+        <div class="top_title">ЭТАПЫ</div>
+        <div class="title-2 tf__common_heading_color">Как мы будем работать</div>
     </div>
-    <div class="row">
-        <div class="col-md-6 tf__work_process_img-box">
-        <div class="tf__work_process_img">
+    <div class="work_process__content-box">
+        <div class="work_process__content-left">
             {% image page.img_steps_work original as image %}
             <img
             src="{{ image.url }}"
             alt="Изображение процесса работы по шагам"
             class="w-100" >
         </div>
-        </div>
-        <div class="col-md-6">
-        <div class="tf__process_accordion">
-            <div class="accordion" id="accordionExample">
-                {% for step in page.steps_works %}
-                <div class="accordion-item">
-                    <div class="accordion-header" id="headingOne0{{ forloop.counter }}">
-                        <button
-                        class="accordion-button tf__process_accordion_btn {% if not forloop.first %}collapsed{% endif %}"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapse0{{ forloop.counter }}"
-                        aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
-                        aria-controls="collapse0{{ forloop.counter }}"
-                        >
-                        <span>{{ forloop.counter }}</span>
-                        {% include_block step.value.title %}
-                        </button>
-                    </div>
-                    <div
-                        id="collapse0{{ forloop.counter }}"
-                        class="accordion-collapse collapse {% if forloop.first %}show{% endif %}"
-                        aria-labelledby="heading0{{ forloop.counter }}"
-                        data-bs-parent="#accordionExample"
-                    >
-                        <div class="accordion-body">
-                        <p>
-                            {% include_block step.value.description %}
-                        </p>
-                        </div>
-                    </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-        </div>
-    </div>
+        <ul class="work_process__content-right">
+            {% for step in page.steps_works %}
+            <li class="work_process__item">
+                <div class="work_process__item-title">
+                    <span class="work_process__item-title-num">{{ forloop.counter }}</span>
+                    {% include_block step.value.title %}
+                </div>
+                <p class="work_process__item-description">
+                    {% include_block step.value.description %}
+                </p>
+            </li>
+            {% endfor %}
+        </ul>
     </div>
 </section>
 ПРЕИМУЩЕСТВА
@@ -103,29 +75,22 @@
         {% endfor %}
     </ul>
 </section>
-<section class="tf__faq">
-    <div class="container">
-    <div class="row">
-        <div class="col-xl-6 m-auto">
-        <div class="tf__common_heading tf__faq_common_heading">
-            <div class="top_title">faq</div>
-            <div class="title-2 tf__common_heading_color">
-            Вопросы и ответы по услуге
-            </div>
-        </div>
+<section class="service-faq">
+    <div class="service-faq__heading">
+        <div class="top_title">faq</div>
+        <div class="title-2 tf__common_heading_color">
+        Вопросы и ответы по услуге
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-xl-8 col-md-8 col-lg-8 mx-auto">
-            {% for faq in page.faq %}
-            <details class="tf__faq_accordion_item">
-                <summary><h3>{% include_block faq.value.question %}</h3></summary>
+    <div class="service-faq__content-box">
+        {% for faq in page.faq %}
+        <details class="service-faq__item">
+            <summary><h3>{% include_block faq.value.question %}</h3><div class="service-faq__item-open"></div></summary>
+            <div class="service-faq__item-content">
                 {% include_block faq.value.answer|richtext %}
-            </details>
-            {% endfor %}
-        </div>
-    </div>
+            </div>
+        </details>
+        {% endfor %}
     </div>
 </section>
 </div>

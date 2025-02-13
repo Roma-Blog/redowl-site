@@ -52,11 +52,15 @@
     margin: 0 auto;
 }
 .page-service__header{
+    background: #eff7fb;
+}
+.page-service__header-box{
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 32px;
-    padding: 160px 64px 64px;
-    background: #eff7fb;
+    max-width: 1140px;
+    padding: 192px 20px 128px;
+    margin: 0 auto;
 }
 .page-service__header-left{
     align-self: center;
@@ -86,7 +90,8 @@
 }
 .page-service__content{
     max-width: 1140px;
-    margin: 64px auto;
+    margin: 128px auto;
+    padding: 0 20px;
 }
 .page-service__content-box{
     max-width: 800px;
@@ -96,6 +101,7 @@
 }
 .page-service__pricing-heading{
     text-align: center;
+    margin: 128px 0 64px;
 }
 .page-service__pricing-list{
     max-width: 1140px;
@@ -111,8 +117,136 @@
     padding: 48px 28px;
 
 }
+.work_process__header{
+    text-align: center;
+    margin: 128px 0 64px;
+}
+.work_process__content-box{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 96px;
+    max-width: 1140px;
+    padding: 0 20px;
+    margin: 0 auto 64px;
+}
+.work_process__content-left{
+    align-self: center;
+}
+.work_process__content-left img{
+    width: 100%;
+}
+.work_process__content-right{
+    align-self: center;
+    position: relative;
+}
+.work_process__content-right::before{
+    position: absolute;
+    content: "";
+    border-left: var(--colorSecondary) 2px dashed;
+    height: 100%;
+    margin-left: 16px;
+    z-index: -1;
+}
+.work_process__item-title{
+    margin: 32px 0 16px;
+    color: var(--colorSecondary);
+    font-family: var(--headingFont);
+    font-size: calc(1.275rem + .3vw);
+    font-weight: 500;
+    line-height: 1.2;
+}
+.work_process__item-title-num{
+    padding: 15px 20px;
+    border-radius: 50%;
+    background-color: var(--colorPrimary);
+    color: var(--colorWhite);
+    font-size: 20px;
+    font-weight: 700;
+    margin-right: 32px;
+}
+.work_process__item-description{
+    padding-left: 64px;
+}
+.service-faq{
+    background-color: #eff7fb;
+    border-radius: 50px;
+    padding: 128px 0 192px;
+}
+.service-faq__heading{
+    text-align: center;
+    margin: 0 0 64px;
+}
+.service-faq__content-box{
+    max-width: 840px;
+    padding: 0 20px;
+    margin: 0 auto;
+}
+.service-faq__item{
+    margin-bottom: 28px;
+    border-bottom: solid 1px rgba(17, 16, 19, 0.2);
+}
+.service-faq__item summary{
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+}
+.service-faq__item summary h3{
+    margin: 0 0 12px;
+    font-size: clamp(16px, 5vw + 1rem, 28px);
+}
+.service-faq__item-open{
+    margin-left: 32px;
+    width: 32px;
+    height: 32px;
+    position: relative;
+}
+.service-faq__item-open::after,.service-faq__item-open::before{
+    position: absolute;
+    content: "";
+    width: 20px;
+    height: 4px;
+    border-radius: 10px;
+    background-color: var(--colorSecondary);
+    top:14px
+}
+.service-faq__item-open::after{
+    content: "";
+    transform: rotate(90deg);
+    transition: all 0.2s;
+}
+.service-faq__item[open] .service-faq__item-open::after{
+    transform: rotate(0);
+}
+.service-faq__item-content{
+    padding: 32px 0 32px 32px;
+}
+
+.service__popup{
+margin:auto;
+max-width: 420px;
+padding:64px 32px;
+border: none;
+}
+.service__popup-close-block{
+display: flex;
+justify-content: end;
+}
+.service__popup-btn{
+padding: 2px 8px;
+color:#fff;
+background-color:var(--colorSecondary);
+}
+.service__popup-title{
+font-size: 28px;
+font-weight: 700;
+color: var(--colorSecondary);
+margin: 16px 0;
+text-transform: none;
+}
+
 @media (max-width: 1000px) {
-    .page-service__header{
+    .page-service__header-box{
         grid-template-columns: 3fr 2fr;
     }
     .page-service__pricing-list{
@@ -120,11 +254,18 @@
     }
 }
 @media (max-width: 800px) {
-    .page-service__header{
+    .page-service__header-box{
         grid-template-columns: 1fr;
     }
     .page-service__pricing-list{
         grid-template-columns: 1fr;
+    }
+    .work_process__content-box{
+        display: block;
+        max-width: 512px;
+    }
+    .work_process__content-left{
+        display: none;
     }
 }
 @media (max-width: 600px) {
