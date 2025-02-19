@@ -751,20 +751,6 @@ input[type="checkbox"] {
     padding: 80px 0;
   }
 }
-<<<<<<< HEAD
-@media (max-width: 800px){
-  .footer__box-form{
-    display: block;
-    max-width: 512px;
-  }
-  .footer__box-form-left{
-    padding: 0;
-    margin-bottom: 32px;
-  }
-}
-=======
-
->>>>>>> origin/main
 @media (max-width: 766px) {
   .form-block-text{
     margin-bottom: 32px;
@@ -785,11 +771,3 @@ input[type="checkbox"] {
   order: 2;
   }
 }
-<<<<<<< HEAD
-@media (max-width: 500px){
-  .footer__form input{
-    width: 100%;
-  }
-}
-=======
->>>>>>> origin/main

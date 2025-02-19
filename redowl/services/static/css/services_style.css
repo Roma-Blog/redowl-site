@@ -184,11 +184,7 @@
 }
 .service-faq{
     background-color: #eff7fb;
-<<<<<<< HEAD
-    border-radius: 50px 50px 0px 0px;
-=======
     border-radius: 50px;
->>>>>>> origin/main
     padding: 128px 0 192px;
 }
 .service-faq__heading{
