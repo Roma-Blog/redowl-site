@@ -24,6 +24,7 @@
             src="{{ image.url }}"
             alt="Изображение услуги {{ page.tag_h1 }}">
         </div>
+<<<<<<< HEAD
     </div>
 </section>
 <section class="work_process">
@@ -31,6 +32,20 @@
         <div class="top_title">ЭТАПЫ</div>
         <div class="title-2 tf__common_heading_color">Как мы будем работать</div>
     </div>
+=======
+    </div>
+</section>
+<section class="page-service__content">
+    <div class="page-service__content-box" itemprop="description">
+        {{ page.seo_text|richtext }}
+    </div>
+</section>
+<section class="work_process">
+    <div class="work_process__header">
+        <div class="top_title">ЭТАПЫ</div>
+        <div class="title-2 tf__common_heading_color">Как мы будем работать</div>
+    </div>
+>>>>>>> origin/main
     <div class="work_process__content-box">
         <div class="work_process__content-left">
             {% image page.img_steps_work original as image %}
@@ -69,11 +84,14 @@
         {% endfor %}
     </ul>
 </section>
+<<<<<<< HEAD
 <section class="page-service__content">
     <div class="page-service__content-box" itemprop="description">
         {{ page.seo_text|richtext }}
     </div>
 </section>
+=======
+>>>>>>> origin/main
 <section class="service-faq">
     <div class="service-faq__heading">
         <div class="top_title">faq</div>
