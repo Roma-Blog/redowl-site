@@ -1,0 +1,69 @@
+{% extends "wagtailadmin/base.html" %}
+
+{% load menu_settings %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href=" {% static 'css/site_settings_style.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Настройка меню</h1>
+<div class="settings-menu__cont">
+    <div class="settings-menu__box-list">
+        <h2>Список меню</h2>
+        <span>Список меню</span>
+        <button>Создать меню</button>
+        <ul class="settings-menu__menu-list">
+            <li class="settings-menu__menu-item">
+                <span>Меню 1</span>
+                <div class="settings-menu__menu-item-control">
+                    <button>Редактировать</button>
+                    <button>Удалить</button>
+                </div>
+            </li>
+            <li class="settings-menu__menu-item">
+                <span>Меню 2</span>
+                <div class="settings-menu__menu-item-control">
+                    <button>Редактировать</button>
+                    <button>Удалить</button>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="settings-menu__box-list">
+        <h2>Редактирование меню</h2>
+        <label for="name-menu">Название меню</label>
+        <input id="name-menu" type="text">
+        <label for="slug">Ярлык меню</label>
+        <input id="slug" type="text">
+        <span>Пункты меню</span>
+        <button id="add-item-menu" >Добавить</button>
+        <ul class="settings-menu__list">
+            <li class="settings-menu__item settings-menu__item--new"><div><span>Новый пункт</span></div><div><button>Настроить</button><button>Добавить</button><button>Удалить</button></div></li>
+        </ul>
+
+        <button>Сохранить</button>
+    </div>
+</div>
+{{all_pages}}
+<dialog open="">
+    <ul>
+        {% get_list_pages all_pages %}
+    </ul>
+
+</dialog>
+
+<script>
+    const btn_add_item_menu = document.querySelector('#add-item-menu');
+    const list_item_menu = document.querySelector('.settings-menu__list');
+    const list_item_menu_new = '';
+
+    btn_add_item_menu.addEventListener('click', function() {
+        list_item_menu.insertAdjacentHTML('beforeend', list_item_menu_new);
+    });
+
+</script>
+
+
+{% endblock %}

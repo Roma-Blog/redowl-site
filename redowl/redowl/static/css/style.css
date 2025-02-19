@@ -4,6 +4,7 @@
   margin: 0;
   padding: 0;
   outline: 0;
+  box-sizing: border-box;
 }
 
 :root {
@@ -30,8 +31,7 @@ body {
   color: var(--paraColor);
 }
 
-p,
-span {
+p, span {
   font-size: 16px;
   font-weight: 400;
   margin: 0;
@@ -39,9 +39,10 @@ span {
   color: var(--paraColor);
   font-family: var(--paraFont);
 }
-
-ul,
-ol {
+p {
+  margin-bottom: 16px;
+}
+ul, ol {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -655,6 +656,58 @@ input[type="checkbox"] {
   max-width: 800px;
 }
 
+.footer__box-form{
+  background-color: var(--colorSecondary);
+  max-width: 1200px;
+  margin: -128px auto 48px;
+  border-radius: 50px;
+  padding: 64px 64px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px
+}
+.footer__box-form-title{
+  font-size: clamp(16px, 5vw + 1rem, 32px);
+  font-weight: 700;
+  color: var(--colorWhite);
+  margin-bottom: 16px;
+}
+.footer__box-form-left{
+  padding-top: 32px;
+}
+.footer__box-form-left p{
+  max-width: 320px;
+}
+
+.footer__form label, .footer__form input{
+  display: block;
+  margin-bottom: 8px;
+}
+.footer__form input{
+  margin-bottom: 16px;
+  width: 320px;
+  border: none;
+  padding: 8px 16px;
+  font-size: 16px;
+  border-radius: 10px;
+}
+.footer__form input.footer__form-btn{
+  background-color: var(--colorPrimary);
+  border: solid 2px var(--colorPrimary);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.footer__form input.footer__form-btn:hover{
+  background-color: transparent;
+}
+.footer__box-form-mess{
+  max-width: 320px;
+  opacity: 0.6;
+  font-size: 14px;
+}
+
 @media (max-width: 1400px) {
   .page-contac-address{
     flex-wrap: nowrap;
@@ -698,7 +751,16 @@ input[type="checkbox"] {
     padding: 80px 0;
   }
 }
-
+@media (max-width: 800px){
+  .footer__box-form{
+    display: block;
+    max-width: 512px;
+  }
+  .footer__box-form-left{
+    padding: 0;
+    margin-bottom: 32px;
+  }
+}
 @media (max-width: 766px) {
   .form-block-text{
     margin-bottom: 32px;
@@ -717,5 +779,10 @@ input[type="checkbox"] {
   }
   .page-contact-img{
   order: 2;
+  }
+}
+@media (max-width: 500px){
+  .footer__form input{
+    width: 100%;
   }
 }

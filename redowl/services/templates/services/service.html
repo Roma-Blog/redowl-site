@@ -26,11 +26,6 @@
         </div>
     </div>
 </section>
-<section class="page-service__content">
-    <div class="page-service__content-box" itemprop="description">
-        {{ page.seo_text|richtext }}
-    </div>
-</section>
 <section class="work_process">
     <div class="work_process__header">
         <div class="top_title">ЭТАПЫ</div>
@@ -59,7 +54,6 @@
         </ul>
     </div>
 </section>
-ПРЕИМУЩЕСТВА
 <section class="page-service__pricing">
     <div class="page-service__pricing-heading">
         <div class="top_title">pricing</div>
@@ -74,6 +68,11 @@
         </li>
         {% endfor %}
     </ul>
+</section>
+<section class="page-service__content">
+    <div class="page-service__content-box" itemprop="description">
+        {{ page.seo_text|richtext }}
+    </div>
 </section>
 <section class="service-faq">
     <div class="service-faq__heading">

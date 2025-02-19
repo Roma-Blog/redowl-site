@@ -103,8 +103,8 @@
         <div class="row">
         <div class="footer__box-form">
             <div class="footer__box-form-left">
-                <div>НАПИШИТЕ НАМ</div>
-                <div class="title-form">
+                <div class="top_title">НАПИШИТЕ НАМ</div>
+                <div class="footer__box-form-title">
                     {% block form_title %}
                         {% if page.form_title %}
                             {{ page.form_title }}
@@ -125,11 +125,12 @@
             </div>
             <div class="footer__box-form-right">
                 {% contact_form as form %}
-                <form class="ajax-form" action="{% url 'tg-forms' %}" method="post">
+                <form class="footer__form ajax-form" action="{% url 'tg-forms' %}" method="post">
                     {% csrf_token %}
                     {{ form.contact_form.as_p }}
-                    <input type="submit" value="Отправить">
+                    <input class="footer__form-btn" type="submit" value="Отправить">
                 </form>
+                <p class="footer__box-form-mess">Нажимая на кнопку "Отправить", вы соглашаетесь с нашей политикой конфиденциальности.</p>
             </div>
         </div>
 

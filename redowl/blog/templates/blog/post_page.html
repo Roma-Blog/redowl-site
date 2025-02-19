@@ -9,74 +9,65 @@
 {% endblock extra_css %}
 
 {% block content %}
-<section class="blog-post" itemscope itemtype="https://schema.org/BlogPosting">
+<div itemscope itemtype="https://schema.org/BlogPosting">
+<section>
     <div class="blog-post__header">
         <div class="top_title" >НАШ БЛОГ</div>
         <h1 itemprop="headline">{{ page.tag_h1 }}</h1>
     </div>
-    <div class="blog-post__cont">
-        <div class="tf__blog_details_left">
-            <div class="tf__blog_details_left_back">
-                <a href="/blog/"><<< Назад к списку статей</a>
+</section>
+<section class="blog-content">
+    <div class="blog-content__cont">
+        <div class="blog-content__left">
+            <div class="blog-content__left-back">
+                <a href="{{ page.get_parent.url }}"><<< Назад к списку статей</a>
             </div>
-            <div class="tf__blog_details_left_img">
+            <div class="blog-content__box-thumbnail">
+
                 {% image page.img_post original as image %}
                 <img
                 src="{{ image.url }}"
                 alt="Изображение для статьи {{ page.tag_h1 }}"
-                class="img-fluid w-100" >
+                class="" >
             </div>
-            <div class="tf__blog_details_author d-flex flex-wrap">
-                <ul class="d-flex flex-wrap">
-                    <li>
-                        <p>Автор</p>
-                        <span itemprop="author">Рыжиков Роман</span>
-                    </li>
-                    <li>
-                        <p>Дата публикации</p>
-                        <span itemprop="datePublished" datetime="<?php echo get_the_date('c'); ?>"><?php the_time('d F Y'); ?></span>
-                    </li>
-                </ul>
+            <ul class="blog-content__info">
+                <li>
+                    <p>Автор</p>
+                    <span itemprop="author">Рыжиков Роман</span>
+                </li>
+                <li>
+                    <p>Дата публикации</p>
+                    <span itemprop="datePublished" datetime="{{ page.date_published|date:"Y-m-d" }}">{{ page.date_published|date:"d F Y" }}</span>
+                </li>
+            </ul>
+            <div class="blog-content__richtext">
+                {{ page.text_post|richtext }}
             </div>
-            {{ page.text_post|richtext }}
         </div>
-        <div class="tf__blog_details_right">
-            <div>Свежие посты</div>
-            <?php
-                query_posts(array(
-                    'post_type' => array('blog'),
-                    'posts_per_page' => 4,
-                    'paged' => $paged,
-                ));
-    
-                if (have_posts()) {
-                while (have_posts()) : the_post();
-                ?>
-    
-                    <div class="tf__popular_post">
-                    <div class="tf__popular_post_img">
-                        <img
-                        src="<?php the_post_thumbnail_url(); ?>"
-                        alt="Изображение для статьи <?php the_title(); ?>"
-                        class="img-fluid w-100" >
-                    </div>
-                    <div class="tf__popular_post_text">
-                        <ul class="d-flex flex-wrap">
-                        <li><?php the_time('d F Y'); ?></li>
-                        <li>. Рыжиков Роман</li>
-                        </ul>
-                        <a href="<?php the_permalink( ) ?>"><?php the_title() ?></a>
-                    </div>
-                    </div>
-                <?php
-                endwhile;
-    
-                wp_reset_postdata();
-            } else {
-                echo 'Нет записей';
-            }
-                ?>
+        <div class="blog-content__right">
+            <div class="new-post__header">Свежие посты</div>
+            <div class="new-post__list">
+            {% get_posts_list 3 as posts %}
+            {% for post in posts %}
+            <div class="new-post__item">
+                <div class="new-post__item-img">
+                    {% image post.img_post width-165 as image %}
+                    <img
+                    src="{{ image.url }}"
+                    alt="Изображение для статьи {{ post.title }}">
+                </div>
+                <div class="new-post__item-title">
+                    <ul class="new-post__item-info">
+                        <li>{{ page.date_published|date:"d/m/Y" }}</li>
+                        <li>Рыжиков Роман</li>
+                    </ul>
+                    <a href="{{ post.url }}" class="new-post__item-link">{{ post.title }}</a>
+                </div>
+            </div>
+            {% endfor %}
         </div>
-    </div>
+        </div>
+    </div> 
 </section>
+</div>
 {% endblock content %}

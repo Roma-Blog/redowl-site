@@ -4,5 +4,5 @@ from django import template
 register = template.Library()
 
 @register.simple_tag
-def get_posts_list():
-    return PostPage.objects.all().order_by('-latest_revision_created_at')
+def get_posts_list(count=None):
+    return PostPage.objects.all().order_by('-date_published')[:count]
