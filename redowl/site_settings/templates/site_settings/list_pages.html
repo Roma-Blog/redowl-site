@@ -1,13 +1,22 @@
 {% load menu_settings %}
 
-
+<ul class="dialog-list-page__list">
 {% for title, details in list_page.items %}
-    <li>
-        {{ title }} (ID: {{ details.id }})
-        {% if details.children %}
-            <ul>
-                {% get_list_pages details.children %}
-            </ul>
-        {% endif %}
+    <li class="dialog-list-page__item">
+        <details class="dialog-list-page__item-details">
+            <summary>
+                <label>
+                    <input type="radio" name="item-page" value="{{ details.id }}" data-title="{{ title }}">
+                    <span>{{ title }}</span>
+                </label>
+                {% if details.children %}
+                <button class="dialog-list-page__btn-open details-btn-open"></button>
+                {% endif %}
+            </summary>
+            {% if details.children %}
+            {% get_list_pages details.children %}
+            {% endif %}
+        </details>
     </li>
 {% endfor %}
+</ul>

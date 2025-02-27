@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 from wagtail import hooks
 from django.urls import path
 from wagtail.admin.menu import MenuItem
@@ -26,16 +27,32 @@ def custom_admin_view(request):
     pages = Page.objects.all()
 
     context = {
-        'all_pages': structure_tree_page(pages, True)
+        'all_pages': structure_tree_page(pages[0].get_children(), True)
     }
 
     return render(request, 'site_settings/site_settings_menu.html', context)
+
+def edit_menu(request):
+    if request.method == "POST":
+        item_menu = request.POST
+        name_menu = item_menu.get('name-menu')
+        slug_id = item_menu.get('slug-id')
+        name_link = item_menu.getlist('name-link')
+        print(name_link)
+
+        
+
+           
+
+        return JsonResponse({'status': 'ok'})
+    return JsonResponse({'status': 'error'})
 
 # Добавьте URL для вашей кастомной страницы
 @hooks.register('register_admin_urls')
 def register_admin_urls():
     return [
         path('settings-menu/', custom_admin_view, name='custom_admin_page'),
+        path('settings-menu/edit-menu/', edit_menu, name='edit_menu_page'),
     ]
 
 

@@ -33,35 +33,350 @@
     </div>
     <div class="settings-menu__box-list">
         <h2>Редактирование меню</h2>
-        <label for="name-menu">Название меню</label>
-        <input id="name-menu" type="text">
-        <label for="slug">Ярлык меню</label>
-        <input id="slug" type="text">
-        <span>Пункты меню</span>
-        <button id="add-item-menu" >Добавить</button>
-        <ul class="settings-menu__list">
-            <li class="settings-menu__item settings-menu__item--new"><div><span>Новый пункт</span></div><div><button>Настроить</button><button>Добавить</button><button>Удалить</button></div></li>
-        </ul>
+        <form action="/admin/settings-menu/edit-menu/" method="post" class="ajax-form">
+            {% csrf_token %}
+            <label for="name-menu">Название меню*</label>
+            <input id="name-menu" type="text" name="name-menu" required>
+            <label for="slug">Ярлык меню*</label>
+            <input id="slug" type="text" name="slug-id" required>
+            <span>Пункты меню</span>
+            <button id="create-item-menu" type="button">Добавить</button>
+            <div class="settings-menu__list-root">
 
-        <button>Сохранить</button>
+            </div>
+            <input type="submit" value="Сохранить">
+        </form>
     </div>
 </div>
-{{all_pages}}
-<dialog open="">
-    <ul>
-        {% get_list_pages all_pages %}
-    </ul>
 
+<dialog class="dialog-list-page" id = "dialog-list-page">
+    <input id="dialog-name-item" type="text" value="">
+    {% get_list_pages all_pages %}
+    <p id="dialog-error"></p>
+    <button id="dialog-btn-add">Добавить</button>
+    <button id="dialog-btn-close">Закрыть</button>
 </dialog>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
-    const btn_add_item_menu = document.querySelector('#add-item-menu');
-    const list_item_menu = document.querySelector('.settings-menu__list');
-    const list_item_menu_new = '';
+    const svg_edit = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 394.69 394.69" style="enable-background:new 0 0 394.69 394.69;" xml:space="preserve" width="16" height="16"><g><g><rect x="67.071" y="127.783" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -81.2718 197.5973)" width="261.629" height="138.239"></rect></g></g><g><g><path d="M388.801,78.658L316.609,5.442c-7.168-7.168-18.432-7.168-25.088-0.512c0,0,0,0-0.512,0.512l-31.744,31.744l97.792,98.304 l31.744-31.744C395.969,96.578,395.969,85.314,388.801,78.658z"></path></g></g><g><g><path d="M42.177,261.954L1.729,370.498c-3.584,9.216,1.024,19.456,10.24,23.04c4.096,1.536,8.704,1.536,12.8,0l108.544-40.96 L42.177,261.954z"></path></g></g></svg>'
+    const svg_add = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 60.364 60.364" style="enable-background:new 0 0 60.364 60.364;" xml:space="preserve" width="16" height="16"width="16" height="16"><g><path d="M54.454,23.18l-18.609-0.002L35.844,5.91C35.845,2.646,33.198,0,29.934,0c-3.263,0-5.909,2.646-5.909,5.91v17.269 L5.91,23.178C2.646,23.179,0,25.825,0,29.088c0.002,3.264,2.646,5.909,5.91,5.909h18.115v19.457c0,3.267,2.646,5.91,5.91,5.91 c3.264,0,5.909-2.646,5.91-5.908V34.997h18.611c3.262,0,5.908-2.645,5.908-5.907C60.367,25.824,57.718,23.178,54.454,23.18z"></path></g></svg>'
+    const svg_delete = '<svg id="Layer_1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" width="16" height="16"><path d="m20 3h-5.18a2.988 2.988 0 0 0 -5.64 0h-5.18a2 2 0 0 0 0 4v13.89a2.117 2.117 0 0 0 2.11 2.11h11.78a2.117 2.117 0 0 0 2.11-2.11v-13.89a2 2 0 0 0 0-4zm-11 15a1 1 0 0 1 -2 0v-7a1 1 0 0 1 2 0zm4 0a1 1 0 0 1 -2 0v-7a1 1 0 0 1 2 0zm4 0a1 1 0 0 1 -2 0v-7a1 1 0 0 1 2 0z"></path></svg>'
 
-    btn_add_item_menu.addEventListener('click', function() {
-        list_item_menu.insertAdjacentHTML('beforeend', list_item_menu_new);
+    class PageList {
+        constructor(_id_dialog) {
+            this.dialog_window = document.querySelector(_id_dialog)
+
+            this.add_element_dialog()
+            this.add_event_details_btn()
+            this.add_event_btn_close()
+            this.add_event_radio()
+        }
+        add_element_dialog() {
+            this.btn_add = this.dialog_window.querySelector('#dialog-btn-add')
+            this.btn_close = this.dialog_window.querySelector('#dialog-btn-close')
+            this.input_name_page = this.dialog_window.querySelector('#dialog-name-item')
+            this.list_details = this.dialog_window.querySelectorAll('details')
+            this.list_radio = this.dialog_window.querySelectorAll('input[type="radio"]')
+            this.error_message = this.dialog_window.querySelector('#dialog-error')
+        }
+        add_event_details_btn() {
+            for (let i = 0; i < this.list_details.length; i++){
+                let _details = this.list_details[i]
+                let _btn_open = _details.querySelector('.details-btn-open')
+                if (!_btn_open) continue
+                _btn_open.addEventListener('click', function(){
+                    _details.open = !_details.open
+                })
+            }
+        }
+        add_event_radio() {
+            for (let i = 0; i < this.list_radio.length; i++){
+                let _radio = this.list_radio[i]
+                let _input_name = this.input_name_page
+                _radio.addEventListener('click', function(){
+                   _input_name.value = this.dataset['title']
+                })
+            }
+        }
+        add_event_btn_close() {
+            let _this_obj = this
+            this.btn_close.addEventListener('click', function() {
+                _this_obj.close()
+            })
+        }
+
+        close() {
+
+            this.input_name_page.value = ''
+            this.error_message.innerText = ''
+
+            for (let i = 0; i < this.list_details.length; i++){
+                let _details = this.list_details[i]
+                _details.open = false
+            }
+
+            for (let i = 0; i < this.list_radio.length; i++){
+                let _radio = this.list_radio[i]
+                _radio.checked = false
+            }
+
+            this.dialog_window.close()
+        }
+
+    }
+
+    class Menu {
+        constructor(_btn_cim, _list_page) {
+            this.name = ''
+            this.slug = ''
+            this.root_id_menu = 'root'
+            this.list_page = new PageList(_list_page)
+            this.menu_list = new MenuList(this.root_id_menu, this.root_id_menu, this.list_page)
+            this.btn_cim_list = []
+
+            this.add_btn_cim_item(_btn_cim, this.menu_list)
+        }
+
+        add_btn_cim_item(_btn_id){
+            let _btn_obj = document.querySelector(_btn_id)
+            this.add_event_btn_add_item(_btn_obj, this.menu_list, 'Добавить')
+            this.btn_cim_list.push(_btn_obj)
+        }
+
+        add_event_btn_add_item(_btn, _menu_list, _text_btn) {
+            let _list_page = this.list_page
+
+            _btn.addEventListener('click', function() {
+                _list_page.dialog_window.showModal()
+                _list_page.btn_add.innerText = _text_btn
+                _list_page.btn_add.onclick = function() {
+                    _menu_list.add_item()
+                }
+            })
+        }
+    }
+
+    class MenuItem {
+        constructor(_id, _name, _order, _page_id, _dom_parent, _list_page, _parent_menu_list) {
+            this.id = _id
+            this.name = _name
+            this.order = _order
+            this.page_id = _page_id
+            this.dom_parent = document.querySelector('#' + _dom_parent)
+            this.list_page = _list_page
+            this.parent_menu_list = _parent_menu_list
+            this.create_item_menu()
+            this.create_sub_menu()
+            this.add_element_item_menu()
+            this.add_event_btn_setting()
+            this.add_event_btn_add()
+            this.add_event_btn_delete()
+        }
+
+        add_element_item_menu() {
+            this.obj_text_item = document.querySelector('#' + this.id + ' .settings-menu__item-name')
+            this.btn_settings = document.querySelector('#' + this.id + ' .settings-menu__item-settings')
+            this.input_name_link = document.querySelector('#' + this.id + ' input[name="name-link"]')
+            this.input_id_page = document.querySelector('#' + this.id + ' input[name="id-page"]')
+            this.input_order = document.querySelector('#' + this.id + ' input[name="order-item"]')
+            this.input_id = document.querySelector('#' + this.id + ' input[name="id"]')
+            this.btn_add = document.querySelector('#' + this.id + ' .settings-menu__item-add')
+            this.btn_delete = document.querySelector('#' + this.id + ' .settings-menu__item-delete')
+        }
+
+        create_item_menu() {
+            let _li = document.createElement('li')
+            _li.id = this.id
+            _li.classList.add('settings-menu__item')
+            _li.innerHTML = `
+            <div class="settings-menu__item-cont">
+                <div>
+                    <span class="settings-menu__item-name">${this.name}</span>
+                </div>
+                <div>
+                    <button class="settings-menu__item-add settings-menu__item-btn" type="button">
+                        ${svg_add}
+                    </button>
+                    <button class="settings-menu__item-settings settings-menu__item-btn"  type="button">
+                        ${svg_edit}
+                    </button>
+                    <button class="settings-menu__item-delete settings-menu__item-btn" type="button">
+                        ${svg_delete}
+                    </button>
+                </div>
+                <input type="hidden" name="name-link" value="${this.name}">
+                <input type="hidden" name="id-page" value="${this.page_id}">
+                <input type="hidden" name="parent" value="${this.parent_menu_list.parent}">
+                <input type="hidden" name="order-item" value="${this.order}">
+                <input type="hidden" name="id" value="${this.id}">
+            </div>`
+
+            this.dom_parent.appendChild(_li)
+        }
+
+        create_sub_menu() {
+            this.sub_menu = new MenuList(this.id + '-sub-menu', this.id, this.list_page)
+            let _sub_menu_ul = this.sub_menu.dom_root.querySelector('.settings-menu__list')
+            _sub_menu_ul.classList.add('settings-menu__sub-list')
+        }
+
+        add_event_btn_setting() {
+            let _this_obj = this
+            let _btn_settings = this.btn_settings
+
+            _btn_settings.addEventListener('click', function() {
+                let _radio_item_page = document.querySelector('input[name="item-page"][value="' + _this_obj.page_id + '"]')
+
+                _radio_item_page.checked = true
+                _this_obj.list_page.dialog_window.showModal()
+                _this_obj.list_page.btn_add.innerText = 'Сохранить'
+                _this_obj.list_page.input_name_page.value = _this_obj.name
+
+                _this_obj.list_page.btn_add.onclick = function() {
+                    _this_obj.edit_item_menu()
+                }
+            })
+        }
+        add_event_btn_add() {
+            let _this_obj = this
+
+            this.btn_add.addEventListener('click', function() {
+                _this_obj.list_page.dialog_window.showModal()
+                _this_obj.list_page.btn_add.innerText = 'Добавить'
+                _this_obj.list_page.btn_add.onclick = function() {
+                    _this_obj.sub_menu.add_item()
+                }
+            })
+        }
+        add_event_btn_delete() {
+            let _this_obj = this
+
+            this.btn_delete.addEventListener('click', function() {
+                let _message = confirm('Вы действительно хотите удалить пункт меню?')
+
+                if (_message) {
+                    _this_obj.delete_item_menu()
+                }
+            })
+        }
+        
+        delete_item_menu() {
+            if (this.sub_menu.menu_list.length > 0) {
+                this.sub_menu.delete_items()
+            }
+
+            this.dom_parent.removeChild(document.querySelector('#' + this.id))
+            this.parent_menu_list.delete_item_menu(this.id)
+        }
+
+        edit_item_menu() {
+            this.name = this.list_page.input_name_page.value
+            this.obj_text_item.innerText = this.name
+            this.page_id = document.querySelector('input[type="radio"][name="item-page"]:checked').value
+            this.input_name_link.value = this.name
+            this.input_id_page.value = this.page_id
+            
+            this.list_page.close()
+        }
+    }
+
+    class MenuList {
+        constructor(_id, _parent, _list_page) {
+            this.id = _id
+            this.menu_list = []
+            this.parent = _parent
+            this.dom_root = _parent != 'root' ? document.querySelector('#' + _parent) : document.querySelector('.settings-menu__list-root')
+            this.count_item = 0
+            this.number_item = 0
+            this.list_page = _list_page
+            this.create_list_menu()
+        }
+
+        create_list_menu() {
+            let _ul = document.createElement('ul')
+            _ul.id = this.id
+            _ul.classList.add('settings-menu__list')
+            this.dom_root.appendChild(_ul)
+        }
+
+        check_valid_list_page() {
+            if (this.list_page.input_name_page.value != '' && document.querySelector('input[name="item-page"]:checked') != null) {
+                return true
+            }
+            return false
+        }
+
+        add_item() {
+            
+            if (this.check_valid_list_page()) {
+                let _name = this.list_page.input_name_page.value
+                let _page_id = document.querySelector('input[name="item-page"]:checked').value
+
+                this.list_page.close()
+
+                this.menu_list.push(new MenuItem(this.id + '-item-' + this.number_item, _name, this.count_item, _page_id, this.id, this.list_page, this))
+                this.count_item++
+                this.number_item++
+            } else {
+                this.list_page.error_message.innerText = 'Заполните все поля и выберете страницу для ссылки'
+            }
+        }
+
+        delete_items() {
+            for (let i = 0; i < this.menu_list.length; i++){
+                this.menu_list[i].delete_item_menu()
+            }
+        }
+        delete_item_menu(_id_delete) {
+            for (let i = 0; i < this.menu_list.length; i++){
+                if (this.menu_list[i].id == _id_delete) {
+                    this.menu_list.splice(i, 1)
+                    this.order_calculate()
+                    return
+                }
+            }
+        }
+
+        order_calculate() {
+            for (let i = 0; i < this.menu_list.length; i++){
+                this.menu_list[i].order = i
+                this.menu_list[i].input_order.value = i
+            }
+            
+            this.count_item = this.menu_list.length
+        }
+
+    }
+
+    $(document).ready(function() {
+        $('.ajax-form').on('submit', function(event) {
+            event.preventDefault();
+            let form = $(this);
+            let url = form.attr('action');
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: form.serialize(),
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        console.log(response);
+                    } else {
+                        console.log(response);
+                    }
+                },
+                error: function() {
+                    alert('Произошла ошибка при отправке формы. Пожалуйста, попробуйте еще раз.');
+                }
+            });
+        });
     });
+
+    let menu = new Menu('#create-item-menu', '#dialog-list-page')
 
 </script>
 

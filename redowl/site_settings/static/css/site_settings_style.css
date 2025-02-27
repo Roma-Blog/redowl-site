@@ -12,12 +12,12 @@ h1{
     max-width: 1000px;
     margin: 0 auto;
 }
-.settings-menu__list{
+.settings-menu__list-root{
     list-style: none;
     padding: 32px 16px;
     border: 1px solid rgba(17, 16, 19, 0.1);
 }
-.settings-menu__list li{
+.settings-menu__item-cont{
     display: flex;
     justify-content: space-between;
     padding: 8px 16px;
@@ -25,19 +25,37 @@ h1{
     border-radius: 10px;
     margin-bottom: 4px;
 }
-.settings-menu__list li.settings-menu__item--new{
-    background-color: rgba(255, 0, 0, 0.2);
+.settings-menu__item-btn{
+    padding: 4px 6px 2px;
+}
+.settings-menu__sub-list{
+    padding-left: 24px;
 }
 .settings-menu__menu-list{
     list-style: none;
     padding: 32px 16px;
     border: 1px solid rgba(17, 16, 19, 0.1);
 }
-.settings-menu__menu-item{
+
+.dialog-list-page__list{
+    list-style: none;
+    padding-left: 16px;
+}
+.dialog-list-page__item{
+    margin-bottom: 16px;
+}
+.dialog-list-page__item summary{
     display: flex;
     justify-content: space-between;
-    padding: 8px 16px;
-    background-color: rgba(49, 48, 51, 0.1);
-    border-radius: 10px;
-    margin-bottom: 4px;
+    align-items: center;
+}
+.dialog-list-page__item label{
+    display: flex;
+    align-items: center;
+}
+details:not([open]):first-child .dialog-list-page__btn-open::after{
+    content: "+";
+}
+details[open] .dialog-list-page__btn-open::after{
+    content: "-";
 }
