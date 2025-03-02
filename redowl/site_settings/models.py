@@ -2,12 +2,10 @@ from django.db import models
 from wagtail.contrib.settings.models import BaseGenericSetting, register_setting
 from wagtail import blocks
 from wagtail.images.blocks import ImageChooserBlock
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel
+from wagtail.admin.panels import FieldPanel
 from wagtail.fields import StreamField
-from redowl.models import RedOwlPage
-from mptt.models import MPTTModel, TreeForeignKey
 from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
+from wagtail.models import Page
 
 class SocialMediaBlock(blocks.StructBlock):
     name = blocks.CharBlock()
@@ -52,16 +50,31 @@ class SettingsSite(BaseGenericSetting):
     class Meta:
         verbose_name = "Настройки сайта"
 
+class Menu(models.Model):
+    name = models.CharField(max_length=255, null=True, blank=True)
+    slug = models.SlugField(max_length=255)
+    items = models.ManyToManyField('ItemMenu', related_name='menu')
 
-class ItemSiteMenu(MPTTModel):
+    def delete(self, *args, **kwargs):
+        items_to_delete = self.items.all()
+        self.items.clear() 
+
+        for item in items_to_delete:
+            if item.menu.count() == 0:
+                item.delete()
+
+        super().delete(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Меню"
+        verbose_name_plural = "Меню"
+
+class ItemMenu(models.Model):
     order = models.PositiveIntegerField(default=0, blank=True, null=True)
     name = models.CharField(max_length=255)
-    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='page')
 
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    page = GenericForeignKey('content_type', 'object_id')
-
-    class MPTTMeta:
-        order_insertion_by = ['order'] 
-
+    sub_menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='sub_menu', null=True, blank=True)

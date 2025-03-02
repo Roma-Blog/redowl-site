@@ -15,20 +15,15 @@
         <span>Список меню</span>
         <button>Создать меню</button>
         <ul class="settings-menu__menu-list">
+            {% for menu in all_menu %}
             <li class="settings-menu__menu-item">
-                <span>Меню 1</span>
+                <span>{{ menu.name }}</span>
                 <div class="settings-menu__menu-item-control">
-                    <button>Редактировать</button>
-                    <button>Удалить</button>
+                    <button class="btn-edit-menu" data-slug="{{ menu.slug }}">Редактировать</button>
+                    <button class="btn-delete-menu" data-slug="{{ menu.slug }}">Удалить</button>
                 </div>
             </li>
-            <li class="settings-menu__menu-item">
-                <span>Меню 2</span>
-                <div class="settings-menu__menu-item-control">
-                    <button>Редактировать</button>
-                    <button>Удалить</button>
-                </div>
-            </li>
+            {% endfor %}
         </ul>
     </div>
     <div class="settings-menu__box-list">
@@ -62,6 +57,8 @@
     const svg_edit = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 394.69 394.69" style="enable-background:new 0 0 394.69 394.69;" xml:space="preserve" width="16" height="16"><g><g><rect x="67.071" y="127.783" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -81.2718 197.5973)" width="261.629" height="138.239"></rect></g></g><g><g><path d="M388.801,78.658L316.609,5.442c-7.168-7.168-18.432-7.168-25.088-0.512c0,0,0,0-0.512,0.512l-31.744,31.744l97.792,98.304 l31.744-31.744C395.969,96.578,395.969,85.314,388.801,78.658z"></path></g></g><g><g><path d="M42.177,261.954L1.729,370.498c-3.584,9.216,1.024,19.456,10.24,23.04c4.096,1.536,8.704,1.536,12.8,0l108.544-40.96 L42.177,261.954z"></path></g></g></svg>'
     const svg_add = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 60.364 60.364" style="enable-background:new 0 0 60.364 60.364;" xml:space="preserve" width="16" height="16"width="16" height="16"><g><path d="M54.454,23.18l-18.609-0.002L35.844,5.91C35.845,2.646,33.198,0,29.934,0c-3.263,0-5.909,2.646-5.909,5.91v17.269 L5.91,23.178C2.646,23.179,0,25.825,0,29.088c0.002,3.264,2.646,5.909,5.91,5.909h18.115v19.457c0,3.267,2.646,5.91,5.91,5.91 c3.264,0,5.909-2.646,5.91-5.908V34.997h18.611c3.262,0,5.908-2.645,5.908-5.907C60.367,25.824,57.718,23.178,54.454,23.18z"></path></g></svg>'
     const svg_delete = '<svg id="Layer_1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" width="16" height="16"><path d="m20 3h-5.18a2.988 2.988 0 0 0 -5.64 0h-5.18a2 2 0 0 0 0 4v13.89a2.117 2.117 0 0 0 2.11 2.11h11.78a2.117 2.117 0 0 0 2.11-2.11v-13.89a2 2 0 0 0 0-4zm-11 15a1 1 0 0 1 -2 0v-7a1 1 0 0 1 2 0zm4 0a1 1 0 0 1 -2 0v-7a1 1 0 0 1 2 0zm4 0a1 1 0 0 1 -2 0v-7a1 1 0 0 1 2 0z"></path></svg>'
+
+    let menu_list = document.querySelectorAll('.settings-menu__menu-item') // список меню
 
     class PageList {
         constructor(_id_dialog) {
@@ -127,12 +124,12 @@
     }
 
     class Menu {
-        constructor(_btn_cim, _list_page) {
+        constructor(_btn_cim, _list_page, _menu_id = null) {
             this.name = ''
             this.slug = ''
             this.root_id_menu = 'root'
             this.list_page = new PageList(_list_page)
-            this.menu_list = new MenuList(this.root_id_menu, this.root_id_menu, this.list_page)
+            this.menu_list = new MenuList(_menu_id ? _menu_id : this.root_id_menu, this.root_id_menu, this.list_page)
             this.btn_cim_list = []
 
             this.add_btn_cim_item(_btn_cim, this.menu_list)
@@ -158,14 +155,15 @@
     }
 
     class MenuItem {
-        constructor(_id, _name, _order, _page_id, _dom_parent, _list_page, _parent_menu_list) {
-            this.id = _id
+        constructor(_id, _name, _order, _page_id, _dom_parent, _list_page, _parent_menu_list, _sub_menu_id = null) {
+            this.id = 'item-' + _id
             this.name = _name
             this.order = _order
             this.page_id = _page_id
             this.dom_parent = document.querySelector('#' + _dom_parent)
             this.list_page = _list_page
             this.parent_menu_list = _parent_menu_list
+            this.sub_menu_id = _sub_menu_id
             this.create_item_menu()
             this.create_sub_menu()
             this.add_element_item_menu()
@@ -216,7 +214,7 @@
         }
 
         create_sub_menu() {
-            this.sub_menu = new MenuList(this.id + '-sub-menu', this.id, this.list_page)
+            this.sub_menu = new MenuList(this.sub_menu_id, this.id, this.list_page)
             let _sub_menu_ul = this.sub_menu.dom_root.querySelector('.settings-menu__list')
             _sub_menu_ul.classList.add('settings-menu__sub-list')
         }
@@ -376,7 +374,49 @@
         });
     });
 
-    let menu = new Menu('#create-item-menu', '#dialog-list-page')
+    function create_item_menu(data, menu_list, list_page){
+        for (let item in data) {
+            item_menu = new MenuItem(item, data[item].name, data[item].order, data[item].page_id, menu_list.id, list_page, menu_list, data[item]['sub_menu']['slug'])
+            menu_list.menu_list.push(item_menu)
+            if (Object.keys(data[item].sub_menu.items).length > 0) {
+                let sub_menu = item_menu.sub_menu
+                create_item_menu(data[item].sub_menu.items, sub_menu, list_page)
+            }
+        }
+    }
+
+    function edit_menu(data){
+        let menu = new Menu('#create-item-menu', '#dialog-list-page')
+        let input_menu_name = document.querySelector('#name-menu')
+        let input_menu_slug = document.querySelector('#slug')
+
+        input_menu_name.value = data.name
+        input_menu_slug.value = data.slug
+        input_menu_slug.disabled = true
+
+        create_item_menu(data.items, menu.menu_list, menu.list_page)
+
+
+    }
+
+    menu_list.forEach(function(item) {
+        btn_edit_menu = item.querySelector('.btn-edit-menu')
+
+        btn_edit_menu.addEventListener('click', function() {
+            let slug = this.dataset['slug']
+
+            $.ajax({
+                url: '/admin/settings-menu/edit-menu/',
+                type: 'GET',
+                data: {
+                    'slug': slug
+                },
+                success: function(response) {
+                    edit_menu(response)
+                }
+            });
+        })
+    })
 
 </script>
 
